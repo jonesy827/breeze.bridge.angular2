@@ -61,7 +61,7 @@ var AjaxAngular2Adapter = (function () {
     function AjaxAngular2Adapter(http) {
         this.http = http;
         this.name = AjaxAngular2Adapter.adapterName;
-        this.defaultSettings = {};
+        this.defaultSettings = {withCredentials: true};
     }
     AjaxAngular2Adapter.prototype.initialize = function () { };
     AjaxAngular2Adapter.prototype.ajax = function (config) {
@@ -102,6 +102,7 @@ var AjaxAngular2Adapter = (function () {
             url: url,
             method: (config.type || 'GET').toUpperCase(),
             headers: headers,
+            withCredentials: true,
             body: body,
         });
         var request = new http_1.Request(reqOptions);
@@ -109,6 +110,7 @@ var AjaxAngular2Adapter = (function () {
             adapter: this,
             requestOptions: reqOptions,
             request: request,
+            withCredentials: true,
             dsaConfig: config,
             success: successFn,
             error: errorFn // adapter's error callback
@@ -120,7 +122,7 @@ var AjaxAngular2Adapter = (function () {
             }
         }
         if (requestInfo.request) {
-            return this.http.request(requestInfo.request)
+            return this.http.request(requestInfo.request, reqOptions)
                 .map(extractData)
                 .toPromise()
                 .then(requestInfo.success)
